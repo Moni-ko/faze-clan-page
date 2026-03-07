@@ -1,38 +1,168 @@
-.App {
+/* 全局样式重置与背景 */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+.app-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 头部 (Hero Section) */
+.hero-section {
   text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  border-bottom: 4px solid #E41936; /* FaZe Red */
+  border-radius: 8px 8px 0 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.team-logo {
+  width: 120px;
+  filter: drop-shadow(0 0 10px rgba(228, 25, 54, 0.5));
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.team-name {
+  font-size: 3rem;
+  margin: 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.badge {
+  display: inline-block;
+  background-color: #E41936;
   color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
 }
 
-.App-link {
-  color: #61dafb;
+.team-desc {
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+  color: #cccccc;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* 标题统一样式 */
+h2 {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 2rem;
+  color: #E41936;
+  text-transform: uppercase;
+}
+
+/* 阵容网格 (Roster Section) */
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.player-card {
+  background-color: #1a1a1a;
+  border-left: 4px solid #E41936;
+  padding: 20px;
+  border-radius: 4px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.player-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(228, 25, 54, 0.2);
+}
+
+.player-alias {
+  font-size: 1.5rem;
+  margin: 0 0 5px 0;
+  color: #ffffff;
+}
+
+.player-name {
+  margin: 0 0 15px 0;
+  color: #888888;
+  font-style: italic;
+}
+
+.player-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+}
+
+.role {
+  color: #E41936;
+  font-weight: bold;
+}
+
+.player-rating {
+  background-color: #2a2a2a;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* 荣誉列表 (Achievements Section) */
+.achievements-list {
+  list-style: none;
+  padding: 0;
+  max-width: 800px;
+  margin: 30px auto 0;
+}
+
+.achievement-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1a1a1a;
+  margin-bottom: 10px;
+  padding: 15px 20px;
+  border-radius: 4px;
+  border: 1px solid #333;
+}
+
+.achievement-item .year {
+  font-weight: bold;
+  color: #888888;
+  width: 60px;
+}
+
+.achievement-item .title {
+  flex-grow: 1;
+  font-size: 1.1rem;
+}
+
+.achievement-item .placement {
+  color: #FFD700; /* Gold for winner */
+  font-weight: bold;
+}
+
+/* 页脚 */
+.footer {
+  text-align: center;
+  margin-top: 60px;
+  padding: 20px;
+  border-top: 1px solid #333;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.footer a {
+  color: #E41936;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }
