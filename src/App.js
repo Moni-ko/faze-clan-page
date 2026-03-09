@@ -1,80 +1,146 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ArrowUp } from 'lucide-react';
 import './App.css';
+
+// Components
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import Sponsors from './components/Sponsors';
+import MatchCountdown from './components/MatchCountdown';
+import Roster from './components/Roster';
+import News from './components/News';
+import Shop from './components/Shop';
+import Achievements from './components/Achievements';
+import Matches from './components/Matches';
+import Timeline from './components/Timeline';
+import Newsletter from './components/Newsletter';
+import Footer from './components/Footer';
+import PlayerDetail from './components/PlayerDetail';
+import TeamLogo from './assets/faze.jpg';
 
 // 模拟来自 HLTV 的战队数据
 const teamData = {
   name: "FaZe Clan",
-  logo: "https://img-cdn.hltv.org/teamlogo/9b9f931d8c1c49987f1ce2152d1bbcf7.png?ixlib=java-2.1.0&w=100&s=12022ba63011a6ccfce508d5edff444d", // HLTV FaZe Logo
-  worldRanking: 2, // 示例排名
-  description: "FaZe Clan 是一家总部位于美国的知名电子竞技组织。他们的 CS 分部以其强大的国际阵容和极具观赏性的打法闻名，曾赢下 PGL 安特卫普 Major 以及第四赛季 Intel 大满贯。",
+  logo: TeamLogo, // HLTV FaZe Logo
+  worldRanking: 11, // 2026年3月最新排名
+  description: "FaZe Clan 是一家总部位于美国的全球顶级电子竞技组织。其 CS 分部以国际化阵容著称，在 2025-2026 赛季经历了一系列人员调整后，依然保持在世界顶尖梯队，并获得了 2025 年布达佩斯 Major 亚军。",
 };
 
 const players = [
-  { alias: "karrigan", name: "Finn Andersen", role: "IGL (指挥)", country: "🇩🇰 丹麦", rating: "0.92" },
-  { alias: "rain", name: "Håvard Nygaard", role: "Rifler (步枪手/突破)", country: "🇳🇴 挪威", rating: "1.08" },
-  { alias: "broky", name: "Helvijs Saukants", role: "AWPer (狙击手)", country: "🇱🇻 拉脱维亚", rating: "1.14" },
-  { alias: "ropz", name: "Robin Kool", role: "Rifler (步枪手/自由人)", country: "🇪🇪 爱沙尼亚", rating: "1.16" },
-  { alias: "frozen", name: "David Čerňanský", role: "Rifler (步枪手)", country: "🇸🇰 斯洛伐克", rating: "1.13" }
+  { alias: "karrigan", name: "Finn Andersen", role: "IGL (指挥)", country: "🇩🇰 丹麦", rating: "0.90" },
+  { alias: "frozen", name: "David Čerňanský", role: "Rifler (步枪手)", country: "🇸🇰 斯洛伐克", rating: "1.15" },
+  { alias: "Twistzz", name: "Russel Van Dulken", role: "Rifler (步枪手)", country: "🇨🇦 加拿大", rating: "1.12" },
+  { alias: "broky", name: "Helvijs Saukants", role: "AWPer (狙击手)", country: "🇱🇻 拉脱维亚", rating: "1.11" },
+  { alias: "jcobbb", name: "Jakub Pietruszewski", role: "Rifler (步枪手/新秀)", country: "🇵🇱 波兰", rating: "1.05" }
 ];
 
 const achievements = [
+  { year: 2025, title: "StarLadder Budapest Major 2025", placement: "亚军 🥈" },
   { year: 2023, title: "IEM Sydney 2023", placement: "冠军 🏆" },
   { year: 2023, title: "Intel Grand Slam Season 4", placement: "大满贯得主 🌟" },
   { year: 2022, title: "PGL Major Antwerp 2022", placement: "冠军 🏆" },
-  { year: 2022, title: "IEM Cologne 2022", placement: "冠军 🏆" },
-  { year: 2022, title: "IEM Katowice 2022", placement: "冠军 🏆" }
+  { year: 2022, title: "IEM Cologne 2022", placement: "冠军 🏆" }
 ];
+
+const HomePage = ({ teamData, players, achievements }) => {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  const showBtn = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <>
+      {/* Scroll to Top Button */}
+      <motion.button 
+        className="scroll-top-btn"
+        onClick={scrollToTop}
+        style={{ opacity: showBtn }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <ArrowUp size={24} />
+      </motion.button>
+
+      {/* 滚动进度条 */}
+      <motion.div className="progress-bar" style={{ 
+        scaleX, 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        height: '4px', 
+        background: 'var(--primary)', 
+        transformOrigin: '0%',
+        zIndex: 1001 
+      }} />
+
+      {/* 背景动态装饰 */}
+      <div className="bg-decoration" style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: -1,
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: '-10%',
+          right: '-10%',
+          width: '40%',
+          height: '40%',
+          background: 'radial-gradient(circle, rgba(228, 30, 38, 0.05) 0%, transparent 70%)',
+          borderRadius: '50%'
+        }} />
+        <div style={{
+          position: 'absolute',
+          bottom: '10%',
+          left: '-5%',
+          width: '30%',
+          height: '30%',
+          background: 'radial-gradient(circle, rgba(228, 30, 38, 0.03) 0%, transparent 70%)',
+          borderRadius: '50%'
+        }} />
+      </div>
+
+      <Navbar />
+      <Hero teamData={teamData} />
+      <MatchCountdown />
+      <Sponsors />
+      <News />
+      <Roster players={players} />
+      <Shop />
+      <Timeline />
+      <Achievements achievements={achievements} />
+      <Matches />
+      <Newsletter />
+      <Footer />
+    </>
+  );
+};
 
 function App() {
   return (
-    <div className="app-container">
-      {/* 头部信息 */}
-      <header className="hero-section">
-        <img src={teamData.logo} alt={`${teamData.name} Logo`} className="team-logo" />
-        <h1 className="team-name">{teamData.name}</h1>
-        <div className="badge">HLTV World Ranking: #{teamData.worldRanking}</div>
-        <p className="team-desc">{teamData.description}</p>
-      </header>
-
-      {/* 阵容列表 */}
-      <section className="roster-section">
-        <h2>现役阵容 (Active Roster)</h2>
-        <div className="players-grid">
-          {players.map((player, index) => (
-            <div className="player-card" key={index}>
-              <h3 className="player-alias">{player.alias}</h3>
-              <p className="player-name">{player.name}</p>
-              <div className="player-details">
-                <span className="role">{player.role}</span>
-                <span className="country">{player.country}</span>
-              </div>
-              <div className="player-rating">
-                HLTV Rating 2.0: <strong>{player.rating}</strong>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 荣誉列表 */}
-      <section className="achievements-section">
-        <h2>主要荣誉 (Notable Achievements)</h2>
-        <ul className="achievements-list">
-          {achievements.map((item, index) => (
-            <li key={index} className="achievement-item">
-              <span className="year">{item.year}</span>
-              <span className="title">{item.title}</span>
-              <span className="placement">{item.placement}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* 页脚 */}
-      <footer className="footer">
-        <p>数据参考自 <a href="https://www.hltv.org/" target="_blank" rel="noreferrer">HLTV.org</a> | 仅供学习参考</p>
-      </footer>
-    </div>
+    <Router>
+      <div className="app-container">
+        <Routes>
+          <Route path="/" element={<HomePage teamData={teamData} players={players} achievements={achievements} />} />
+          <Route path="/player/:alias" element={<PlayerDetail players={players} />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
