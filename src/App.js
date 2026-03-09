@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
@@ -133,7 +133,7 @@ const HomePage = ({ teamData, players, achievements }) => {
 
 function App() {
   return (
-    <Router>
+    <Router basename="/faze-clan-page">
       <div className="app-container">
         <Routes>
           <Route path="/" element={<HomePage teamData={teamData} players={players} achievements={achievements} />} />
