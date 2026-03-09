@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
 import './App.css';
 
@@ -47,6 +47,22 @@ const achievements = [
 
 const HomePage = ({ teamData, players, achievements }) => {
   const { scrollYProgress } = useScroll();
+  const location = useLocation();
+
+  useEffect(() => {
+    // 处理从其他页面（如球员详情页）跳转回首页并滚动到特定位置的情况
+    const hash = window.location.hash;
+    if (hash && hash.includes('#section-')) {
+      const id = hash.split('#section-')[1];
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 300);
+      }
+    }
+  }, [location]);
+
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -94,7 +110,8 @@ const HomePage = ({ teamData, players, achievements }) => {
         height: '100%',
         pointerEvents: 'none',
         zIndex: -1,
-        overflow: 'hidden'
+        background: 'radial-gradient(circle at 50% 50%, #0a0a0a 0%, #000 100%)',
+        opacity: 0.8
       }}>
         <div style={{
           position: 'absolute',
@@ -117,14 +134,14 @@ const HomePage = ({ teamData, players, achievements }) => {
       </div>
 
       <Navbar />
-      <Hero teamData={teamData} />
+      <div id="hero"><Hero teamData={teamData} /></div>
       <MatchCountdown />
       <Sponsors />
-      <News />
-      <Roster players={players} />
-      <Shop />
+      <div id="news"><News /></div>
+      <div id="roster"><Roster players={players} /></div>
+      <div id="shop"><Shop /></div>
       <Timeline />
-      <Achievements achievements={achievements} />
+      <div id="achievements"><Achievements achievements={achievements} /></div>
       <Matches />
       <Newsletter />
       <Footer />

@@ -1,7 +1,7 @@
 {
   "name": "faze-clan-page",
   "version": "0.1.0",
-  "homepage": "https://Moni-ko.github.io/faze-clan-page",
+  "homepage": "https://moni-ko.github.io/faze-clan-page",
   "private": true,
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

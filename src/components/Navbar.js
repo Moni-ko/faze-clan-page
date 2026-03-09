@@ -36,11 +36,11 @@ const Navbar = () => {
         <div className="nav-logo">FAZE CLAN</div>
       </Link>
       <div className="nav-links">
-        <Link to="/" onClick={(e) => scrollToSection(e, 'hero')} className="nav-link">Home</Link>
-        <Link to="/" onClick={(e) => scrollToSection(e, 'roster')} className="nav-link">Roster</Link>
-        <Link to="/" onClick={(e) => scrollToSection(e, 'news')} className="nav-link">News</Link>
-        <Link to="/" onClick={(e) => scrollToSection(e, 'shop')} className="nav-link">Shop</Link>
-        <Link to="/" onClick={(e) => scrollToSection(e, 'achievements')} className="nav-link">Awards</Link>
+        <Link to="/#section-hero" onClick={(e) => scrollToSection(e, 'hero')} className="nav-link">Home</Link>
+        <Link to="/#section-roster" onClick={(e) => scrollToSection(e, 'roster')} className="nav-link">Roster</Link>
+        <Link to="/#section-news" onClick={(e) => scrollToSection(e, 'news')} className="nav-link">News</Link>
+        <Link to="/#section-shop" onClick={(e) => scrollToSection(e, 'shop')} className="nav-link">Shop</Link>
+        <Link to="/#section-achievements" onClick={(e) => scrollToSection(e, 'achievements')} className="nav-link">Awards</Link>
       </div>
       <div className="nav-cta">
         <button className="badge" style={{ margin: 0, cursor: 'pointer', padding: '0.5rem 1.2rem', fontSize: '0.7rem' }}>Join Community</button>
