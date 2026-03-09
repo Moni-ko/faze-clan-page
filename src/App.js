@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
 import './App.css';
 
@@ -18,6 +18,7 @@ import Timeline from './components/Timeline';
 import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
 import PlayerDetail from './components/PlayerDetail';
+import NewsDetail from './components/NewsDetail';
 import TeamLogo from './assets/faze.jpg';
 
 // 模拟来自 HLTV 的战队数据
@@ -133,11 +134,12 @@ const HomePage = ({ teamData, players, achievements }) => {
 
 function App() {
   return (
-    <Router basename="/faze-clan-page">
+    <Router>
       <div className="app-container">
         <Routes>
           <Route path="/" element={<HomePage teamData={teamData} players={players} achievements={achievements} />} />
           <Route path="/player/:alias" element={<PlayerDetail players={players} />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
         </Routes>
       </div>
     </Router>

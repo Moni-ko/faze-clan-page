@@ -1,8 +1,30 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
+  const scrollToSection = (e, id) => {
+    if (isHomePage) {
+      e.preventDefault();
+      const element = document.getElementById(id);
+      if (element) {
+        const offset = 80; // Navbar height
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = element.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
+
   return (
     <motion.nav 
       className="navbar"
@@ -14,11 +36,11 @@ const Navbar = () => {
         <div className="nav-logo">FAZE CLAN</div>
       </Link>
       <div className="nav-links">
-        <a href="/#hero" className="nav-link">Home</a>
-        <a href="/#roster" className="nav-link">Roster</a>
-        <a href="/#history" className="nav-link">History</a>
-        <a href="/#achievements" className="nav-link">Awards</a>
-        <a href="/#matches" className="nav-link">Matches</a>
+        <Link to="/" onClick={(e) => scrollToSection(e, 'hero')} className="nav-link">Home</Link>
+        <Link to="/" onClick={(e) => scrollToSection(e, 'roster')} className="nav-link">Roster</Link>
+        <Link to="/" onClick={(e) => scrollToSection(e, 'news')} className="nav-link">News</Link>
+        <Link to="/" onClick={(e) => scrollToSection(e, 'shop')} className="nav-link">Shop</Link>
+        <Link to="/" onClick={(e) => scrollToSection(e, 'achievements')} className="nav-link">Awards</Link>
       </div>
       <div className="nav-cta">
         <button className="badge" style={{ margin: 0, cursor: 'pointer', padding: '0.5rem 1.2rem', fontSize: '0.7rem' }}>Join Community</button>
