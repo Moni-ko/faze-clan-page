@@ -1,18 +1,19 @@
 {
   "files": {
-    "main.css": "/faze-clan-page/static/css/main.54987daf.css",
-    "main.js": "/faze-clan-page/static/js/main.594089da.js",
-    "static/js/453.93dd6e43.chunk.js": "/faze-clan-page/static/js/453.93dd6e43.chunk.js",
-    "static/media/jcobbb.jpg": "/faze-clan-page/static/media/jcobbb.f1822e010f756114baea.jpg",
-    "static/media/twistzz.jpg": "/faze-clan-page/static/media/twistzz.92ada49e050528974cdc.jpg",
-    "static/media/frozen.jpg": "/faze-clan-page/static/media/frozen.63bba158cb1d47d8496d.jpg",
+    "main.css": "/faze-clan-page/static/css/main.ab5c3fb8.css",
+    "main.js": "/faze-clan-page/static/js/main.25a2e3c8.js",
+    "static/js/242.53c73b93.chunk.js": "/faze-clan-page/static/js/242.53c73b93.chunk.js",
+    "static/js/445.c7507d0c.chunk.js": "/faze-clan-page/static/js/445.c7507d0c.chunk.js",
+    "static/js/453.821f8869.chunk.js": "/faze-clan-page/static/js/453.821f8869.chunk.js",
     "index.html": "/faze-clan-page/index.html",
-    "main.54987daf.css.map": "/faze-clan-page/static/css/main.54987daf.css.map",
-    "main.594089da.js.map": "/faze-clan-page/static/js/main.594089da.js.map",
-    "453.93dd6e43.chunk.js.map": "/faze-clan-page/static/js/453.93dd6e43.chunk.js.map"
+    "main.ab5c3fb8.css.map": "/faze-clan-page/static/css/main.ab5c3fb8.css.map",
+    "main.25a2e3c8.js.map": "/faze-clan-page/static/js/main.25a2e3c8.js.map",
+    "242.53c73b93.chunk.js.map": "/faze-clan-page/static/js/242.53c73b93.chunk.js.map",
+    "445.c7507d0c.chunk.js.map": "/faze-clan-page/static/js/445.c7507d0c.chunk.js.map",
+    "453.821f8869.chunk.js.map": "/faze-clan-page/static/js/453.821f8869.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.54987daf.css",
-    "static/js/main.594089da.js"
+    "static/css/main.ab5c3fb8.css",
+    "static/js/main.25a2e3c8.js"
   ]
 }
