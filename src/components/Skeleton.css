@@ -1,0 +1,58 @@
+.pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* News Skeleton */
+.skeleton-news-card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  height: 100%;
+}
+
+.skeleton-news-card .skeleton-image {
+  width: 100%;
+  height: 200px;
+}
+
+.skeleton-news-card .skeleton-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skeleton-news-card .skeleton-date { width: 30%; height: 12px; border-radius: 4px; }
+.skeleton-news-card .skeleton-title { width: 90%; height: 24px; border-radius: 4px; }
+.skeleton-news-card .skeleton-desc { width: 100%; height: 60px; border-radius: 4px; }
+.skeleton-news-card .skeleton-footer { width: 40%; height: 16px; border-radius: 4px; margin-top: auto; }
+
+/* Player Skeleton */
+.skeleton-player-card {
+  background: var(--bg-card);
+  padding: 2.5rem;
+  border-radius: 25px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.skeleton-player-card .skeleton-avatar {
+  width: 100%;
+  height: 200px;
+  border-radius: 15px;
+}
+
+.skeleton-player-card .skeleton-alias { width: 60%; height: 28px; border-radius: 4px; }
+.skeleton-player-card .skeleton-name { width: 40%; height: 16px; border-radius: 4px; }
+.skeleton-player-card .skeleton-stats { width: 100%; height: 80px; border-radius: 10px; margin-top: 1rem; }

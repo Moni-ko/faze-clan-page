@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, useScroll, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { ArrowUp } from 'lucide-react';
 import './App.css';
 
@@ -17,48 +18,101 @@ import Matches from './components/Matches';
 import Timeline from './components/Timeline';
 import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
-import PlayerDetail from './components/PlayerDetail';
-import NewsDetail from './components/NewsDetail';
-import TeamLogo from './assets/faze.jpg';
+import { Suspense, lazy } from 'react';
+const PlayerDetail = lazy(() => import('./components/PlayerDetail'));
+const NewsDetail = lazy(() => import('./components/NewsDetail'));
 
-// 模拟来自 HLTV 的战队数据
-const teamData = {
-  name: "FaZe Clan",
-  logo: TeamLogo, // HLTV FaZe Logo
-  worldRanking: 11, // 2026年3月最新排名
-  description: "FaZe Clan 是一家总部位于美国的全球顶级电子竞技组织。其 CS 分部以国际化阵容著称，在 2025-2026 赛季经历了一系列人员调整后，依然保持在世界顶尖梯队，并获得了 2025 年布达佩斯 Major 亚军。",
+const API_BASE_URL = 'http://localhost:5000/api';
+
+// 图片路径处理工具函数
+const resolveImageUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  // 处理 GitHub Pages 路径或本地路径
+  const baseUrl = process.env.PUBLIC_URL || '';
+  return `${baseUrl}/${path.startsWith('/') ? path.slice(1) : path}`;
 };
 
-const players = [
-  { alias: "karrigan", name: "Finn Andersen", role: "IGL (指挥)", country: "🇩🇰 丹麦", rating: "0.90" },
-  { alias: "frozen", name: "David Čerňanský", role: "Rifler (步枪手)", country: "🇸🇰 斯洛伐克", rating: "1.15" },
-  { alias: "Twistzz", name: "Russel Van Dulken", role: "Rifler (步枪手)", country: "🇨🇦 加拿大", rating: "1.12" },
-  { alias: "broky", name: "Helvijs Saukants", role: "AWPer (狙击手)", country: "🇱🇻 拉脱维亚", rating: "1.11" },
-  { alias: "jcobbb", name: "Jakub Pietruszewski", role: "Rifler (步枪手/新秀)", country: "🇵🇱 波兰", rating: "1.05" }
-];
+// 页面切换动画配置
+const pageVariants = {
+  initial: { opacity: 0, x: -20 },
+  in: { opacity: 1, x: 0 },
+  out: { opacity: 0, x: 20 }
+};
 
-const achievements = [
-  { year: 2025, title: "StarLadder Budapest Major 2025", placement: "亚军 🥈" },
-  { year: 2023, title: "IEM Sydney 2023", placement: "冠军 🏆" },
-  { year: 2023, title: "Intel Grand Slam Season 4", placement: "大满贯得主 🌟" },
-  { year: 2022, title: "PGL Major Antwerp 2022", placement: "冠军 🏆" },
-  { year: 2022, title: "IEM Cologne 2022", placement: "冠军 🏆" }
-];
+const pageTransition = {
+  type: "tween",
+  ease: "anticipate",
+  duration: 0.5
+};
 
-const HomePage = ({ teamData, players, achievements }) => {
+const PageWrapper = ({ children }) => (
+  <motion.div
+    initial="initial"
+    animate="in"
+    exit="out"
+    variants={pageVariants}
+    transition={pageTransition}
+  >
+    {children}
+  </motion.div>
+);
+
+const HomePage = () => {
+  const [teamData, setTeamData] = useState(null);
+  const [players, setPlayers] = useState([]);
+  const [achievements, setAchievements] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const { scrollYProgress } = useScroll();
   const location = useLocation();
 
   useEffect(() => {
-    // 处理从其他页面（如球员详情页）跳转回首页并滚动到特定位置的情况
-    const hash = window.location.hash;
-    if (hash && hash.includes('#section-')) {
-      const id = hash.split('#section-')[1];
-      const element = document.getElementById(id);
+    const fetchData = async () => {
+      try {
+        const [teamRes, playersRes, achRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/team`),
+          fetch(`${API_BASE_URL}/players`),
+          fetch(`${API_BASE_URL}/achievements`)
+        ]);
+
+        const team = await teamRes.json();
+        const playersData = await playersRes.json();
+        const achievementsData = await achRes.json();
+
+        setTeamData({ ...team, logo: resolveImageUrl(team.logo) });
+        setPlayers(playersData.map(p => ({ ...p, image: resolveImageUrl(p.image) })));
+        setAchievements(achievementsData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // 处理从其他页面跳转回首页并滚动到特定位置的情况
+    const fullHash = window.location.hash; // 例如 #/#section-roster
+    if (fullHash.includes('#section-')) {
+      const sectionId = fullHash.split('#section-')[1];
+      const element = document.getElementById(sectionId);
       if (element) {
+        // 稍微延迟确保 DOM 已渲染完成
         setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }, 300);
+          const offset = 80; // 导航栏高度
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const elementRect = element.getBoundingClientRect().top;
+          const elementPosition = elementRect - bodyRect;
+          const offsetPosition = elementPosition - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }, 100);
       }
     }
   }, [location]);
@@ -75,10 +129,17 @@ const HomePage = ({ teamData, players, achievements }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  if (loading) return <div className="loading-screen">Loading FaZe Portal...</div>;
+
   return (
-    <>
+    <PageWrapper>
+      <Helmet>
+        <title>FaZe Clan | Official Fan Portal</title>
+        <meta name="description" content="Welcome to the official FaZe Clan fan portal. Stay updated with the latest news, roster, and matches." />
+      </Helmet>
+
       {/* Scroll to Top Button */}
-      <motion.button 
+      <motion.button
         className="scroll-top-btn"
         onClick={scrollToTop}
         style={{ opacity: showBtn }}
@@ -89,16 +150,16 @@ const HomePage = ({ teamData, players, achievements }) => {
       </motion.button>
 
       {/* 滚动进度条 */}
-      <motion.div className="progress-bar" style={{ 
-        scaleX, 
-        position: 'fixed', 
-        top: 0, 
-        left: 0, 
-        right: 0, 
-        height: '4px', 
-        background: 'var(--primary)', 
+      <motion.div className="progress-bar" style={{
+        scaleX,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '4px',
+        background: 'var(--primary)',
         transformOrigin: '0%',
-        zIndex: 1001 
+        zIndex: 1001
       }} />
 
       {/* 背景动态装饰 */}
@@ -138,28 +199,42 @@ const HomePage = ({ teamData, players, achievements }) => {
       <MatchCountdown />
       <Sponsors />
       <div id="news"><News /></div>
-      <div id="roster"><Roster players={players} /></div>
+      <div id="roster"><Roster players={players} loading={loading} /></div>
       <div id="shop"><Shop /></div>
       <Timeline />
       <div id="achievements"><Achievements achievements={achievements} /></div>
       <Matches />
       <Newsletter />
       <Footer />
-    </>
+    </PageWrapper>
+  );
+};
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Suspense fallback={<div className="loading-screen">Loading...</div>}>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/player/:alias" element={<PlayerDetail />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
+        </Routes>
+      </Suspense>
+    </AnimatePresence>
   );
 };
 
 function App() {
   return (
-    <Router>
-      <div className="app-container">
-        <Routes>
-          <Route path="/" element={<HomePage teamData={teamData} players={players} achievements={achievements} />} />
-          <Route path="/player/:alias" element={<PlayerDetail players={players} />} />
-          <Route path="/news/:id" element={<NewsDetail />} />
-        </Routes>
-      </div>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <div className="app-container">
+          <AnimatedRoutes />
+        </div>
+      </Router>
+    </HelmetProvider>
   );
 }
 

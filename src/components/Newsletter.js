@@ -6,20 +6,35 @@ const Newsletter = () => {
   const [status, setStatus] = useState('idle'); // 'idle', 'loading', 'success'
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) return;
 
     setStatus('loading');
     
-    // Simulate API call
-    setTimeout(() => {
-      setStatus('success');
-      setEmail('');
-      
-      // Reset back to idle after 5 seconds
-      setTimeout(() => setStatus('idle'), 5000);
-    }, 1500);
+    try {
+      const response = await fetch('http://localhost:5000/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setEmail('');
+        
+        // Reset back to idle after 5 seconds
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        throw new Error('Subscription failed');
+      }
+    } catch (error) {
+      console.error("Error subscribing:", error);
+      alert("Subscription failed. Please try again later.");
+      setStatus('idle');
+    }
   };
 
   return (

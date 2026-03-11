@@ -9,16 +9,23 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "framer-motion": "^12.35.1",
     "lucide-react": "^0.577.0",
+    "nodemon": "^3.1.14",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-helmet-async": "^3.0.0",
     "react-router-dom": "^6.30.3",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
+    "server": "nodemon backend/server.js",
+    "dev": "concurrently \"npm start\" \"npm run server\"",
     "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
@@ -44,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "gh-pages": "^6.3.0"
   }
 }
